@@ -19,7 +19,7 @@ note_ids = { "A": 0, "Bb": 1, "A#": 1, "B": 2, "Cb": 2, "C": 3, "Db": 4,
     "G": 10, "Ab": 11, "G#": 11
 }
 
-id_note = ["A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab"]
+id_note = ["A", "_B", "B", "C", "_D", "D", "_E", "E", "F", "^F", "G", "_A"]
 
 def get_chord_tones(chord):
     '''
@@ -60,9 +60,23 @@ def get_chord_tones(chord):
 4. write the chord tone on beat 3
 '''
 
+bebop_fluff = (
+    (3, 2, 1)
+)
+
 if __name__ == "__main__":
+    chords = ("C", "F", "C", "C", "F", "F", "C", "C", "G", "F", "C", "G")
+
     chord_notes = []
     all_notes = []
 
     for chord in chords:
         chord_tones.append(random.choose(get_chord_tones(chord)))
+
+    # The first note won't have any approaches
+    all_notes.append(chord_notes[0])
+
+    for chord_note in chord_notes[1:]:
+        for mod in random.choose(bebop_fluff):
+            all_notes.append( (chord_notes[0] + mod) % 11 )
+    
