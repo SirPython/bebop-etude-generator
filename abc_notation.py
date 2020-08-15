@@ -1,20 +1,48 @@
+from math import floor
+
 class ABCNotator():
     def __init__(self):
         self.note_cnt = 0
         self.msr_cnt = 0
         self.accids = []
+        self.last_tone = 0
 
-    def header(self, key="C", meter="4/4"):
-        return f"""X: 1
+        # Score saved as internal state so that the outer program does not need
+        # to keep track of the score as it is being generated.
+        self.score = f"""X: 1
 T: Bebop Etude
 C: Bebop Etude Generator
-M: {meter}
-K: {key}
+M: 4/4
+K: C
 L: 1/8
 """
 
-    def note(self, note):
-        ret = ""
+    """
+    Convers a tone into ABC notation. Applies commas and apostrophes to
+    represent the octave. Accidentals are applied based on the previous tone
+    notated (self.last_tone)
+    """
+    def cvt_tone(self, tone):
+        note = ""
+
+        # Use flats when going down, sharps when going up
+        if self.last_tone > tone:
+            note = ("C","_D","D","_E","E","F","_G","G","_A","A","_B","B")[tone % 12]
+        else:
+            note = ("C","^C","D","^D","E","F","^F","G","^G","A","^G","B")[tone % 12]
+
+        # Stack on 's or ,s to change octave in ABC notation
+        return note + ( ("'" if tone > 0 else ",") * floor(abs(tone / 12)) )
+
+    """
+    Given a tone, writes it to the score in the state. Inserts spaces, vertical
+    bars, and newlines as appropriate to differentiate 8th note groups,
+    measures, and lines.
+    """
+    def notate(self, tone):
+        # This is a note in the sense of notation
+        note = self.cvt_tone(tone)
+        self.last_tone = tone
 
         # If there's an accidental
         if len(note) > 1:
@@ -29,16 +57,14 @@ L: 1/8
             self.accids = []
             self.msr_cnt += 1
 
-            ret += "|"
+            self.score += "|"
         elif self.note_cnt == 4:
-            ret += " "
+            self.score += " "
 
         if self.msr_cnt == 4:
             self.msr_cnt = 0
 
-            ret += "\n"
+            self.score += "\n"
 
-        ret += note
+        self.score += note
         self.note_cnt += 1
-
-        return ret

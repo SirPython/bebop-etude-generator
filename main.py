@@ -1,11 +1,13 @@
 import random
 from abc_notation import ABCNotator
-import music
+import bebop
 
 def generate_bebop_fluff(chord_note):
     bebop_fluff = (
         (3, 2, 1),
-        (2, 2, 1)
+        (2, 2, 1),
+        (-3, -2, -1),
+        (-2, -2, -1)
     )
 
     ret = []
@@ -20,12 +22,27 @@ def generate_bebop_fluff(chord_note):
 if __name__ == "__main__":
     chords = ("C", "F", "C", "C", "F", "F", "C", "C", "G", "F", "C", "G")
 
-    chord_notes = []
-    all_notes = []
+    chord_tones = []
+    all_tones = []
 
-    for chord in chords:
-        chord_notes.append(random.choice(music.get_chord_tones(chord)))
+    for i, chord in enumerate(chords):
+        note = random.choice(bebop.get_chord_notes(chord))
 
+        chord_tones.append(
+            bebop.pick_octv(
+                note,
+                chord_tones[i-1] if i > 0 else None
+            )
+        )
+
+    abc = ABCNotator()
+    for tone in chord_tones:
+        abc.notate(tone)
+
+    with open("output.abc", "w") as f:
+        f.write(abc.score)
+
+    """
     # The first note won't have any approaches
     all_notes.append(chord_notes[0])
 
@@ -40,4 +57,6 @@ if __name__ == "__main__":
         f.write(abc.header())
 
         for note in all_notes:
-            f.write(abc.note(music.cvt_num(note)))
+            print(note)
+            f.write(abc.note(bebop.cvt_num(note)))
+    """
