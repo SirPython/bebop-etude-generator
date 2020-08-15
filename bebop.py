@@ -10,6 +10,8 @@ A tone can be any integer. It corresponds to a note and an octave.
 import random
 from math import floor
 
+SAXOPHONE = (-2, 30)
+
 def get_chord_notes(chord):
     note_ids = { "C": 0, "Db": 1, "C#": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4,
         "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8, "A": 9, "A#": 10,
@@ -42,8 +44,28 @@ def get_chord_notes(chord):
 
     return notes
 
-def pick_encl():
-    pass
+def create_encl(tone, range=SAXOPHONE):
+    encls = (
+        (3, 2, 1),
+        (2, 3, 1)
+    )
+
+
+    encl = list(
+        (e * random.choice((-1, 1))) + tone
+        for e in random.choice(encls)
+    )
+    encl.append(tone)
+
+    # Likely susceptible to edge cases, but if the enclosures become more
+    # complex in the future, then this will be adjusted.
+    for tone in encl:
+        if tone < range[0]:
+            encl = tuple(e + 12 for e in encl)
+        elif tone > range[1]:
+            encl = tuple(e - 12 for e in encl)
+
+    return encl
 
 """
 Converts a note into a tone by assingin an octave.
@@ -53,9 +75,8 @@ previous tone, a random octave is assigned.
 
 The default range is that of the saxophone.
 """
-def pick_octv(note, prev_tone=None, range=(-2, 30)):
+def pick_octv(note, prev_tone=None, range=SAXOPHONE):
     if prev_tone == None:
-        print("picking random")
         octvs = []
         # The lowest octave
         tone = note - (12 * floor((note - range[0]) / 12))
@@ -68,13 +89,17 @@ def pick_octv(note, prev_tone=None, range=(-2, 30)):
     else:
         prev_note = prev_tone % 12
 
-        # The shortest interval in semitones
+        # The numerical difference in semitones
         intvl = abs(note - prev_note)
+
+        # If the difference is greater than a tritone, then it can be
+        # represented by a smaller interval
         intvl += -12 if intvl > 6 else 0
+
+        # Flip the direction of the interval if the previous note is higher
         intvl *= 1 if note >= prev_note else -1
 
-        print(f"the shortest interval between {prev_note} and {note} is {intvl} semitones\n")
-
+        # If the interval will go out of range, change the direction
         if prev_tone + intvl > range[1] or prev_tone + intvl < range[0]:
             intvl *= -1
 

@@ -35,11 +35,14 @@ if __name__ == "__main__":
             )
         )
 
-    abc = ABCNotator()
-    for tone in chord_tones:
-        abc.notate(tone)
+    all_tones.append(chord_tones[0])
+    for tone in chord_tones[1:]:
+        all_tones.extend(bebop.create_encl(tone))
 
     with open("output.abc", "w") as f:
+        abc = ABCNotator()
+        for tone in all_tones:
+            abc.notate(tone)
         f.write(abc.score)
 
     """

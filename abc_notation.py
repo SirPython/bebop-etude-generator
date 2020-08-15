@@ -23,7 +23,6 @@ L: 1/8
     notated (self.last_tone)
     """
     def cvt_tone(self, tone):
-        print(f"tone {tone} note {tone %12}\n")
         note = ""
 
         # Use flats when going down, sharps when going up
@@ -33,8 +32,8 @@ L: 1/8
             note = ("C","^C","D","^D","E","F","^F","G","^G","A","^G","B")[tone % 12]
 
         # Stack on 's or ,s to change octave in ABC notation
-        octvs = floor(abs(tone / 12)) + (1 if tones < 0)
-        return note + ("'" if tones > 0 else ",") * octvs
+        octvs = floor(abs(tone / 12)) + (1 if tone < 0 else 0)
+        return note + ("'" if tone > 0 else ",") * octvs
 
     """
     Given a tone, writes it to the score in the state. Inserts spaces, vertical
