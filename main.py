@@ -1,12 +1,13 @@
 import random
+from abc_notation import ABCNotator
 
 note_ids = { "A": 0, "Bb": 1, "A#": 1, "B": 2, "Cb": 2, "C": 3, "Db": 4,
     "C#": 4, "D": 5, "Eb": 6, "D#": 6, "E": 7, "F": 8, "F#": 9, "Gb": 9,
     "G": 10, "Ab": 11, "G#": 11
 }
 
-id_note = ["A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "F#", "G",
-    "Ab"]
+id_note = ["=A", "_B", "=B", "=C", "_D", "=D", "_E", "=E", "=F", "^F", "=G",
+    "_A"]
 
 def get_chord_tones(chord):
     tones = []
@@ -69,5 +70,9 @@ if __name__ == "__main__":
     # The last approaches go back around to the first chord
     all_notes.extend(generate_bebop_fluff(chord_notes[0]))
 
-    for note in all_notes:
-        print(id_note[note])
+    with open("output.abc", "w") as f:
+        abc = ABCNotator()
+        f.write(abc.header())
+
+        for note in all_notes:
+            f.write(abc.note(id_note[note]))
