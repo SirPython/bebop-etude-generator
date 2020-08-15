@@ -5,8 +5,8 @@ note_ids = { "A": 0, "Bb": 1, "A#": 1, "B": 2, "Cb": 2, "C": 3, "Db": 4,
     "G": 10, "Ab": 11, "G#": 11
 }
 
-id_note = ["=A", "_B", "=B", "=C", "_D", "=D", "_E", "=E", "=F", "^F", "=G",
-    "_A"]
+id_note = ["A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "F#", "G",
+    "Ab"]
 
 def get_chord_tones(chord):
     tones = []
@@ -19,30 +19,37 @@ def get_chord_tones(chord):
 
     # The third (look for M and -)
     if "-" in chord:
-        tones.append((tones[0] + 3) % 11)
+        tones.append((tones[0] + 3) % 12)
     else:
-        tones.append((tones[0] + 4) % 11)
+        tones.append((tones[0] + 4) % 12)
 
     # The fifth (look for + and 5)
-    tones.append((tones[0] + 7) % 11)
+    tones.append((tones[0] + 7) % 12)
 
     # The seventh
     if "7" in chord:
         if chord[ chord.find("7") - 1 ] == "M":
-            tones.append((tones[0] + 11) % 11)
+            tones.append((tones[0] + 11) % 12)
         else:
-            tones.append((tones[0] + 10) % 11)
-
-    for tone in tones:
-        print(id_note[tone])
-    print("*****")
+            tones.append((tones[0] + 10) % 12)
 
     return tones
 
-bebop_fluff = (
-    (3, 2, 1),
-    (2, 2, 1)
-)
+
+def generate_bebop_fluff(chord_note):
+    bebop_fluff = (
+        (3, 2, 1),
+        (2, 2, 1)
+    )
+
+    ret = []
+
+    for mod in random.choice(bebop_fluff):
+        ret.append( (chord_note + mod) % 12 )
+    ret.append(chord_note)
+
+    return ret
+
 
 if __name__ == "__main__":
     chords = ("C", "F", "C", "C", "F", "F", "C", "C", "G", "F", "C", "G")
@@ -57,7 +64,10 @@ if __name__ == "__main__":
     all_notes.append(chord_notes[0])
 
     for chord_note in chord_notes[1:]:
-        for mod in random.choice(bebop_fluff):
-            all_notes.append( (chord_note + mod) % 11 )
+        all_notes.extend(generate_bebop_fluff(chord_note))
 
-        all_notes.append(chord_note)
+    # The last approaches go back around to the first chord
+    all_notes.extend(generate_bebop_fluff(chord_notes[0]))
+
+    for note in all_notes:
+        print(id_note[note])
