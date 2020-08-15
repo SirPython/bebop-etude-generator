@@ -1,5 +1,7 @@
 from math import floor
 
+#http://www.clivew.com/abc.php
+
 class ABCNotator():
     def __init__(self):
         self.note_cnt = 0

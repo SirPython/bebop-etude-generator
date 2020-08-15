@@ -46,15 +46,11 @@ def get_chord_notes(chord):
 
 def create_encl(tone, range=SAXOPHONE):
     encls = (
-        (3, 2, 1),
-        (2, 3, 1)
+        (0, 0, 0),
+        (0, 0, 0)
     )
 
-
-    encl = list(
-        (e * random.choice((-1, 1))) + tone
-        for e in random.choice(encls)
-    )
+    encl = list(e + tone for e in random.choice(encls))
     encl.append(tone)
 
     # Likely susceptible to edge cases, but if the enclosures become more
@@ -99,8 +95,10 @@ def pick_octv(note, prev_tone=None, range=SAXOPHONE):
         # Flip the direction of the interval if the previous note is higher
         intvl *= 1 if note >= prev_note else -1
 
-        # If the interval will go out of range, change the direction
-        if prev_tone + intvl > range[1] or prev_tone + intvl < range[0]:
-            intvl *= -1
+        # If the interval will go out of range, get the composite interval
+        if prev_tone + intvl > range[1]:
+            intvl -= 12
+        elif prev_tone + intvl < range[0]:
+            intvl += 12
 
         return prev_tone + intvl
