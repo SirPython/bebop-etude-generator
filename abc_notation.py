@@ -33,7 +33,8 @@ L: 1/8
             note = ("C","^C","D","^D","E","F","^F","G","^G","A","^G","B")[tone % 12]
 
         # Stack on 's or ,s to change octave in ABC notation
-        return note + ( ("'" if tone > 0 else ",") * floor(abs(tone / 12)) )
+        octvs = floor(abs(tone / 12)) + (1 if tones < 0)
+        return note + ("'" if tones > 0 else ",") * octvs
 
     """
     Given a tone, writes it to the score in the state. Inserts spaces, vertical

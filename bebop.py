@@ -68,15 +68,12 @@ def pick_octv(note, prev_tone=None, range=(-2, 30)):
     else:
         prev_note = prev_tone % 12
 
-        # If note is C, we need to determine if C should be treated as 0 or 12.
-        # In cases where the note is greater than F#, treating C as 0 makes it
-        # seem as if it is much farther away than it really is.
-
-        # incorrect. you need to see if adding 12 makes it smaller period.
-        note = note + 12 if abs(note + 12 - prev_note) < abs(note - prev_note) else note
-
         # The shortest interval in semitones
-        intvl = abs(note - prev_note) * (1 if note >= prev_note else -1)
+        intvl = abs(note - prev_note)
+        intvl += -12 if intvl > 6 else 0
+        intvl *= 1 if note >= prev_note else -1
+
+        print(f"the shortest interval between {prev_note} and {note} is {intvl} semitones\n")
 
         if prev_tone + intvl > range[1] or prev_tone + intvl < range[0]:
             intvl *= -1
