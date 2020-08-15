@@ -1,7 +1,7 @@
 def get_chord_tones(chord):
-    note_ids = { "A": 0, "Bb": 1, "A#": 1, "B": 2, "Cb": 2, "C": 3, "Db": 4,
-        "C#": 4, "D": 5, "Eb": 6, "D#": 6, "E": 7, "F": 8, "F#": 9, "Gb": 9,
-        "G": 10, "Ab": 11, "G#": 11
+    note_ids = { "C": 0, "Db": 1, "C#": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4,
+        "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8, "A": 9, "A#": 10,
+        "Bb": 10, "B": 11, "Cb": 11
     }
 
     tones = []
@@ -30,8 +30,17 @@ def get_chord_tones(chord):
 
     return tones
 
-def cvt_num(num):
-    id_note = ["A", "_B", "B", "C", "_D", "D", "_E", "E", "F", "^F", "G",
-        "_A"]
+def cvt_num(num, accid="flat"):
+    note = ""
 
-    return id_note[num]
+    if accid == "flat":
+        note = ["C","_D","D","_E","E","F","_G","G","_A","A","_B","B"][num % 12]
+    else:
+        note = ["C","^C","D","^D","E","F","^F","G","^G","A","^G","B"][num % 12]
+
+    if num > 12:
+        note.lower()
+    elif num < 0:
+        note += ","
+
+    return note

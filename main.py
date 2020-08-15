@@ -11,7 +11,7 @@ def generate_bebop_fluff(chord_note):
     ret = []
 
     for mod in random.choice(bebop_fluff):
-        ret.append( (chord_note + mod) % 12 )
+        ret.append(chord_note + mod)
     ret.append(chord_note)
 
     return ret
