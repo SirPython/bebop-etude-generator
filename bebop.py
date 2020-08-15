@@ -46,11 +46,14 @@ def get_chord_notes(chord):
 
 def create_encl(tone, range=SAXOPHONE):
     encls = (
-        (0, 0, 0),
-        (0, 0, 0)
+        (3, 2, 1),
+        (-3, -2, -1)
     )
 
-    encl = list(e + tone for e in random.choice(encls))
+    mod = random.choice(encls)
+    print(mod)
+    print(mod)
+    encl = list(e + tone for e in mod)
     encl.append(tone)
 
     # Likely susceptible to edge cases, but if the enclosures become more

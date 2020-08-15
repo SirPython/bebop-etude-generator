@@ -14,16 +14,11 @@ if __name__ == "__main__":
     for i, chord in enumerate(chords):
         note = random.choice(bebop.get_chord_notes(chord))
 
-
-        ret = bebop.pick_octv(
-            note,
-            chord_tones[i-1] if i > 0 else None
-        )
-
-        print(f"input {boop(note)} ret {boop(ret)}\n")
-
         chord_tones.append(
-            ret
+            bebop.pick_octv(
+                note,
+                chord_tones[i-1] if i > 0 else None
+            )
         )
 
     all_tones.append(chord_tones[0])
