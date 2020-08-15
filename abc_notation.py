@@ -23,6 +23,7 @@ L: 1/8
     notated (self.last_tone)
     """
     def cvt_tone(self, tone):
+        print(f"tone {tone} note {tone %12}\n")
         note = ""
 
         # Use flats when going down, sharps when going up

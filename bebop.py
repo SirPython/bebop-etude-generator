@@ -10,14 +10,6 @@ A tone can be any integer. It corresponds to a note and an octave.
 import random
 from math import floor
 
-def cvt_num(num, accid="flat"):
-
-
-    return note
-
-def tone2note(tone):
-    return tone % 12
-
 def get_chord_notes(chord):
     note_ids = { "C": 0, "Db": 1, "C#": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4,
         "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8, "A": 9, "A#": 10,
@@ -61,8 +53,9 @@ previous tone, a random octave is assigned.
 
 The default range is that of the saxophone.
 """
-def pick_octv(note, prev=None, range=(-2, 30)):
-    if prev == None:
+def pick_octv(note, prev_tone=None, range=(-2, 30)):
+    if prev_tone == None:
+        print("picking random")
         octvs = []
         # The lowest octave
         tone = note - (12 * floor((note - range[0]) / 12))
@@ -73,14 +66,19 @@ def pick_octv(note, prev=None, range=(-2, 30)):
 
         return random.choice(octvs)
     else:
-        intvl = abs(note - prev)
-        up = True if intvl > abs(note+12 - prev) else False
+        prev_note = prev_tone % 12
 
-        if up:
-            # If the interval is supposed to go up but it would go out of range,
-            # then set it downwards instead.
-            up = up and prev + intvl < range[1]
-        else:
-            up = up or prev - intvl < range[0]
+        # If note is C, we need to determine if C should be treated as 0 or 12.
+        # In cases where the note is greater than F#, treating C as 0 makes it
+        # seem as if it is much farther away than it really is.
 
-        return prev + (intvl * (1 if up else -1))
+        # incorrect. you need to see if adding 12 makes it smaller period.
+        note = note + 12 if abs(note + 12 - prev_note) < abs(note - prev_note) else note
+
+        # The shortest interval in semitones
+        intvl = abs(note - prev_note) * (1 if note >= prev_note else -1)
+
+        if prev_tone + intvl > range[1] or prev_tone + intvl < range[0]:
+            intvl *= -1
+
+        return prev_tone + intvl
