@@ -25,6 +25,7 @@ if __name__ == "__main__":
     all_tones.append(chord_tones[0])
     for tone in chord_tones[1:]:
         all_tones.extend(bebop.create_encl(tone))
+    all_tones.extend(bebop.create_encl(chord_tones[0]))
 
     with open("output.abc", "w") as f:
         abc = ABCNotator()
