@@ -79,5 +79,4 @@ def pick_octv(note, prev_tone=None, range=SAXOPHONE):
         elif prev_tone + intvl < range[0]:
             intvl += 12
 
-        #print(f"got {boop(note)} gave {boop(prev_tone+intvl)}")
         return prev_tone + intvl
