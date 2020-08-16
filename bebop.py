@@ -12,9 +12,6 @@ from math import floor
 
 SAXOPHONE = (-2, 30)
 
-FLAT_FLAG  = 0.1
-SHARP_FLAG = 0.2
-
 """
 len(chord_tones) == len(chords)
 """
@@ -32,6 +29,7 @@ def create_encl(chord_tone, range=SAXOPHONE):
     )
 
     encl = list(e + chord_tone for e in random.choice(encls))
+    encl.append(chord_tone)
 
     # Likely susceptible to edge cases, but if the enclosures become more
     # complex in the future, then this will be adjusted.

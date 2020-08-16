@@ -4,6 +4,7 @@ C: Bebop Etude Generator
 M: 4/4
 K: C
 L: 1/8
-E'F'D'^D' D'B^C'_B|G^G_D=D ^D^FA_A|=DF_E_B, ^CB,D^D|=E^G=G_G E=G_G^G|
-B_BA_G ^G^D'D'_D'|D'B^C'B D'_D'D'_D'|C'^C'E'_E' ^D'D'_D'^D'|D'_D'^C'_B =B^C'D'^D'|
-A'_G'^G'D'' _D''C''G'_G'|F'
+E'_D'_B=B C'D'^D'E'|F'G'E'^F' F'BD'_D'|C'C'AB _B^C'C'=B|_BFD^D EGE^F|
+=F^FG^G AC'B_B|AEG_G F_B,^CB,|=CF^G_G =GDF_E|=EFD^D EA^AB|
+C'DB,^C =CB,D_D|=C^C_B,B, =C^GF^F|=GD'B^C' C'B,D_D|=CB,D_D CG'_G'F'|
+E'

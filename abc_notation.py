@@ -1,10 +1,8 @@
 from math import floor
 import bebop
+import music
 
 #http://www.clivew.com/abc.php
-
-def get_flag(tone):
-    return tone - floor(tone)
 
 class ABCNotator():
     def __init__(self):
@@ -29,12 +27,11 @@ L: 1/8
     notated (self.last_tone)
     """
     def cvt_tone(self, tone):
+        tone, flag = music.split_flag(tone)
         note = ""
-        flag = get_flag(tone)
-        tone = int(tone)
 
         # Use flats when going down, sharps when going up
-        if self.last_tone > tone or flag == bebop.FLAT_FLAG:
+        if self.last_tone > tone or flag == music.FLAT_FLAG:
             note = ("C","_D","D","_E","E","F","_G","G","_A","A","_B","B")[tone % 12]
         else:
             note = ("C","^C","D","^D","E","F","^F","G","^G","A","^A","B")[tone % 12]
