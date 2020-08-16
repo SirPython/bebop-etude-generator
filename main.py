@@ -6,14 +6,14 @@ def boop(tone):
     return ("C","Db","D","Eb","E","F","F#","G","Ab", "A", "Bb", "B")[tone % 12]
 
 if __name__ == "__main__":
-    chords = ("C7","C7","F7","F7","C7","C7","G-7","C7","F7","F7","F#-7", "F#-7","C7","C7","E-7","A7",
-        "D-7","D-7","G7","G7","C7","A7","D-7","G7")
+    chords = ("C","C","F","F","C","C","C","C","F","F","F", "F",
+        "C","C","C","C","G","G","F","F","C","C","G","G")
 
     chord_tones = []
     all_tones = []
 
     for i, chord in enumerate(chords):
-        note = random.choice(bebop.get_chord_notes(chord))
+        note = random.choice(bebop.parse_chord(chord))
 
         chord_tones.append(
             bebop.pick_octv(
@@ -22,9 +22,12 @@ if __name__ == "__main__":
             )
         )
 
+    #chord_tones = bebop.flag(chord_tones, chords)
+
     all_tones.append(chord_tones[0])
     for tone in chord_tones[1:]:
         all_tones.extend(bebop.create_encl(tone))
+
     all_tones.extend(bebop.create_encl(chord_tones[0]))
 
     with open("output.abc", "w") as f:
