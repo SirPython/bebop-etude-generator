@@ -9,6 +9,7 @@ A tone can be any integer. It corresponds to a note and an octave.
 
 import random
 from math import floor
+import music
 
 SAXOPHONE = (-2, 30)
 
@@ -16,8 +17,8 @@ SAXOPHONE = (-2, 30)
 len(chord_tones) == len(chords)
 """
 def create_encl(chord_tone, range=SAXOPHONE):
-    # The flag isn't important here
-    chord_tone = floor(chord_tone)
+    # Temporarily split the flag while we generate enclosure notes
+    chord_tone, flag = music.split_flag(chord_tone)
 
     encls = (
         (3, 2, 1),
@@ -29,7 +30,7 @@ def create_encl(chord_tone, range=SAXOPHONE):
     )
 
     encl = list(e + chord_tone for e in random.choice(encls))
-    encl.append(chord_tone)
+    encl.append(chord_tone + flag)
 
     # Likely susceptible to edge cases, but if the enclosures become more
     # complex in the future, then this will be adjusted.

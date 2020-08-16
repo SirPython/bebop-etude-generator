@@ -1,4 +1,4 @@
-from math import floor
+from math import floor, isclose
 import bebop
 import music
 
@@ -31,10 +31,12 @@ L: 1/8
         note = ""
 
         # Use flats when going down, sharps when going up
-        if self.last_tone > tone or flag == music.FLAT_FLAG:
+        if self.last_tone > tone or isclose(flag, music.FLAT_FLAG):
             note = ("C","_D","D","_E","E","F","_G","G","_A","A","_B","B")[tone % 12]
         else:
             note = ("C","^C","D","^D","E","F","^F","G","^G","A","^A","B")[tone % 12]
+
+        #print(f"{note} {flag}")
 
         # Stack on 's or ,s to change octave in ABC notation
         octvs = floor(abs(tone / 12)) + (1 if tone < 0 else 0)
