@@ -6,7 +6,8 @@ def boop(tone):
     return ("C","Db","D","Eb","E","F","F#","G","Ab", "A", "Bb", "B")[tone % 12]
 
 if __name__ == "__main__":
-    chords = ("C", "F", "C", "C", "F", "F", "C", "C", "G", "F", "C", "G")
+    chords = ("C","C","F","F","C","C","C","C","F","F","F", "F","C","C","C","C",
+        "G","G","F","F","C","C","G","G")
 
     chord_tones = []
     all_tones = []
