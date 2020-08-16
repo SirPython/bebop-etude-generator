@@ -47,7 +47,11 @@ def get_chord_notes(chord):
 def create_encl(tone, range=SAXOPHONE):
     encls = (
         (3, 2, 1),
-        (-3, -2, -1)
+        (-3, -2, -1),
+        (1, -2, -1),
+        (-1, 2, 1),
+        (-2, 1, -1),
+        (2, -1, 1)
     )
 
     mod = random.choice(encls)
