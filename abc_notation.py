@@ -50,18 +50,10 @@ L: 1/8
     def notate(self, tone):
         # This is a note in the sense of notation
         note = self.cvt_tone(tone)
-        self.last_tone = tone
-
-        # If there's an accidental
-        if len(note) > 1:
-            self.accids.append(note[1])
-
-        # If there's no accidental but the note has appeared before with one
-        elif note in self.accids:
-            note = f"={note}"
 
         if self.note_cnt == 8:
             self.note_cnt = 0
+            print(self.accids)
             self.accids = []
             self.msr_cnt += 1
 
@@ -74,5 +66,15 @@ L: 1/8
 
             self.score += "\n"
 
+        # If there's an accidental
+        if len(note) > 1 and (note[0] == "_" or note[0] == "^"):
+            self.accids.append(note[1])
+
+        # If there's no accidental but the note has appeared before with one
+        elif note[0] in self.accids:
+            note = f"={note}"
+
         self.score += note
+        
         self.note_cnt += 1
+        self.last_tone = tone
