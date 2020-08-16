@@ -21,16 +21,28 @@ def create_encl(chord_tone, range=SAXOPHONE):
     chord_tone, flag = music.split_flag(chord_tone)
 
     encls = (
-        (3, 2, 1),
-        (-3, -2, -1),
-        (1, -2, -1),
-        (-1, 2, 1),
-        (-2, 1, -1),
-        (2, -1, 1)
+        (3, 2, 1, 0),
+        (-3, -2, -1, 0),
+        (1, -2, -1, 0),
+        (-1, 2, 1, 0),
+        (-2, 1, -1, 0),
+        (2, -1, 1, 0)
     )
 
-    encl = list(e + chord_tone for e in random.choice(encls))
-    encl.append(chord_tone + flag)
+    encl = list(random.choice(encls))
+    for i,e in enumerate(encl):
+        if i == len(encl)-1:
+            break
+
+        # Ascending lines get sharps, descending get flats
+        if e < encl[i+1]:
+            encl[i] += music.SHARP_FLAG
+        else:
+            encl[i] += music.FLAT_FLAG
+
+        encl[i] += chord_tone
+
+    encl[3] = chord_tone + flag
 
     # Likely susceptible to edge cases, but if the enclosures become more
     # complex in the future, then this will be adjusted.

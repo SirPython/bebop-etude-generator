@@ -9,7 +9,6 @@ class ABCNotator():
         self.note_cnt = 0
         self.msr_cnt = 0
         self.accids = []
-        self.last_tone = 0
 
         # Score saved as internal state so that the outer program does not need
         # to keep track of the score as it is being generated.
@@ -31,12 +30,10 @@ L: 1/8
         note = ""
 
         # Use flats when going down, sharps when going up
-        if self.last_tone > tone or isclose(flag, music.FLAT_FLAG):
+        if isclose(flag, music.FLAT_FLAG):
             note = ("C","_D","D","_E","E","F","_G","G","_A","A","_B","B")[tone % 12]
         else:
             note = ("C","^C","D","^D","E","F","^F","G","^G","A","^A","B")[tone % 12]
-
-        #print(f"{note} {flag}")
 
         # Stack on 's or ,s to change octave in ABC notation
         octvs = floor(abs(tone / 12)) + (1 if tone < 0 else 0)
@@ -53,7 +50,6 @@ L: 1/8
 
         if self.note_cnt == 8:
             self.note_cnt = 0
-            print(self.accids)
             self.accids = []
             self.msr_cnt += 1
 
@@ -75,6 +71,5 @@ L: 1/8
             note = f"={note}"
 
         self.score += note
-        
+
         self.note_cnt += 1
-        self.last_tone = tone
