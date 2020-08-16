@@ -2,9 +2,10 @@ import random
 from abc_notation import ABCNotator
 import bebop
 import music
+from math import floor
 
 def boop(tone):
-    return ("C","Db","D","Eb","E","F","F#","G","Ab", "A", "Bb", "B")[tone % 12]
+    return ("C","Db","D","Eb","E","F","F#","G","Ab", "A", "Bb", "B")[floor(tone) % 12]
 
 if __name__ == "__main__":
     chords = (
@@ -19,6 +20,7 @@ if __name__ == "__main__":
     for i, chord in enumerate(chords):
         note = random.choice(music.parse_chord(chord))
 
+        #print(boop(note))
         chord_tones.append(
             bebop.pick_octv(
                 note,

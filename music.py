@@ -14,8 +14,8 @@ def flag(chord_tones, chords):
     # This way we don't end up with instances like an A# over a C7 chord.
     for i, tone in enumerate(chord_tones):
         ret.append(
-            tone + FLAT_FLAG if parse_root(chords[i]) in flats
-            else   SHARP_FLAG
+            tone + (FLAT_FLAG if parse_root(chords[i]) in flats
+            else SHARP_FLAG)
         )
 
     return ret

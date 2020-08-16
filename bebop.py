@@ -17,7 +17,7 @@ len(chord_tones) == len(chords)
 """
 def create_encl(chord_tone, range=SAXOPHONE):
     # The flag isn't important here
-    chord_tone = int(chord_tone)
+    chord_tone = floor(chord_tone)
 
     encls = (
         (3, 2, 1),
@@ -79,4 +79,5 @@ def pick_octv(note, prev_tone=None, range=SAXOPHONE):
         elif prev_tone + intvl < range[0]:
             intvl += 12
 
+        #print(f"got {boop(note)} gave {boop(prev_tone+intvl)}")
         return prev_tone + intvl
