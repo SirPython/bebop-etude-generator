@@ -36,10 +36,29 @@ def generate_etude(chords):
     return abc.score
 
 class RequestHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self):
-        msrs = urllib.parse.unquote(self.path.split("=")[1]).split("|")
-        leadsheet = []
+    def success(self, payload):
+        return bytes(f"""HTTP/1.1 200 OK
+Connection: close
+Content-Type: text/vnd.abc; charset=UTF-8
+Content-Length: {len(payload)}
 
+{payload}
+""", "UTF-8")
+
+    def failure(self):
+        return bytes(f"""HTTP/1.1 400 Bad Request
+Connection: close
+
+""", "UTF-8")
+
+    def do_GET(self):
+        try:
+            msrs = urllib.parse.unquote(self.path.split("=")[1]).split("|")
+        except IndexError:
+            self.wfile.write(self.failure())
+            return
+
+        leadsheet = []
         for msr in msrs:
             chords = msr.split(",")
             leadsheet.extend(chords)
@@ -47,21 +66,19 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
             if len(chords) == 1:
                 leadsheet.append(chords[0])
 
-        self.send_response(200, generate_etude(leadsheet))
-        print("sent")
-
+        self.wfile.write(self.success(generate_etude(leadsheet)))
         self.close_connection = True
 
 if __name__ == "__main__":
-    chords = (
+    """chords = (
         "G7","G7","C7","C7","G7","G7","D-","G7",
         "C7","C7","C7","C#-7","G7","G7","B-7","E7",
         "A-7","A-7","D7","D7","G7","E7","A-7","D7"
     )
 
     with open("output.abc", "w") as f:
-        f.write(generate_etude(chords))
+        f.write(generate_etude(chords))"""
 
-    """with http.server.HTTPServer(("", 80), RequestHandler) as httpd:
+    with http.server.HTTPServer(("", 80), RequestHandler) as httpd:
         print("hosting")
-        httpd.serve_forever()"""
+        httpd.serve_forever()
