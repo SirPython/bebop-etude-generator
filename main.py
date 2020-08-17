@@ -1,26 +1,19 @@
 import random
+from math import floor
+import http.server
+import urllib.parse
+
 from abc_notation import ABCNotator
 import bebop
 import music
-from math import floor
 
-def boop(tone):
-    return ("C","Db","D","Eb","E","F","F#","G","Ab", "A", "Bb", "B")[floor(tone) % 12]
-
-if __name__ == "__main__":
-    chords = (
-        "C7","C7","F7","F7","C7","C7","G-7","C7",
-        "F7","F7","F7","F#-7","C7","C7","E-7","A7",
-        "D-7","D-7","G7","G7","C7","A7","D-7","G7"
-    )
-
+def generate_etude(chords):
     chord_tones = []
     all_tones = []
 
     for i, chord in enumerate(chords):
         note = random.choice(music.parse_chord(chord))
 
-        #print(boop(note))
         chord_tones.append(
             bebop.pick_octv(
                 note,
@@ -36,8 +29,39 @@ if __name__ == "__main__":
 
     all_tones.extend(bebop.create_encl(chord_tones[0]))
 
+    abc = ABCNotator()
+    for tone in all_tones:
+        abc.notate(tone)
+
+    return abc.score
+
+class RequestHandler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        msrs = urllib.parse.unquote(self.path.split("=")[1]).split("|")
+        leadsheet = []
+
+        for msr in msrs:
+            chords = msr.split(",")
+            leadsheet.extend(chords)
+
+            if len(chords) == 1:
+                leadsheet.append(chords[0])
+
+        self.send_response(200, generate_etude(leadsheet))
+        print("sent")
+
+        self.close_connection = True
+
+if __name__ == "__main__":
+    chords = (
+        "G7","G7","C7","C7","G7","G7","D-","G7",
+        "C7","C7","C7","C#-7","G7","G7","B-7","E7",
+        "A-7","A-7","D7","D7","G7","E7","A-7","D7"
+    )
+
     with open("output.abc", "w") as f:
-        abc = ABCNotator()
-        for tone in all_tones:
-            abc.notate(tone)
-        f.write(abc.score)
+        f.write(generate_etude(chords))
+
+    """with http.server.HTTPServer(("", 80), RequestHandler) as httpd:
+        print("hosting")
+        httpd.serve_forever()"""
